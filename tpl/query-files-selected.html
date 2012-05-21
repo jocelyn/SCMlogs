@@ -1,0 +1,28 @@
+<script>
+StartYearFilesBlockControl({VAR_ITEM_YEAR},"y{VAR_ITEM_YEAR}",true);
+</script>
+<noscript>
+	<h1>{VAR_ITEM_YEAR}</h1>
+</noscript>
+<input type=hidden name="selected_years[]" value="{VAR_ITEM_YEAR}" />
+<!-- BEGIN ListMonthsBlock -->
+<script>
+StartYearMonthFilesBlockControl("{VAR_ITEM_YEAR}","{VAR_ITEM_MONTH}","ym{VAR_ITEM_YEAR}-{VAR_ITEM_MONTH}",true);
+</script>
+<noscript>
+	<h2>{VAR_ITEM_MONTH}</h2>
+</noscript>
+<div id="offset">
+	<!-- BEGIN ListFilesBlock -->
+	<span style="font-size: 70%; color: #6666cc;">week {VAR_FILE_ITEM_WEEK}</span>
+	<input type=checkbox {VAR_FILE_CHECKED} name='commitsmonthfiles[{VAR_ITEM_YEAR}][{VAR_ITEM_MONTH}][]' value='{VAR_FILE_KEY_ITEM}' />{VAR_FILE_NAME_ITEM}
+	- <span style="font-size: 70%; color: #6666cc;">{VAR_FILE_ITEM_DAY}</span><br>
+	<!-- END ListFilesBlock -->
+</div>
+<script>
+	EndBlockControl();
+</script>
+<!-- END ListMonthsBlock -->
+<script>
+	EndBlockControl();
+</script>

@@ -1,0 +1,187 @@
+<?php
+	
+class SiteApplication {
+	var $name;
+	var $site;
+//	var $tpl_engine;
+//	var $use_tpl_engine=TRUE;
+//	var $param=array();
+//	var $user_must_be_signed=FALSE;
+
+	Function SiteApp($app, $site) {
+		$this->name = $app;
+		$this->site = $site;
+//		if ($this->use_tpl_engine) {
+//			$this->initTplEngine();
+//		}
+//		echo "<pre>"; print_r ($site->application_args); echo "</pre>";
+	}
+	Function initTplEngine () {
+		require_once SMARTY_DIR.'Smarty.class.php';
+		$smarty =& new Smarty;
+		$smarty->template_dir = 'tpl'. DIRECTORY_SEPARATOR;
+		$smarty->plugins_dir[] = $smarty->template_dir . '_plugins' . DIRECTORY_SEPARATOR;
+		$smarty->compile_dir = 'data'.DIRECTORY_SEPARATOR.'tpl'.DIRECTORY_SEPARATOR . '_compiled' . DIRECTORY_SEPARATOR;
+		$smarty->cache_dir = 'data'.DIRECTORY_SEPARATOR.'tpl'.DIRECTORY_SEPARATOR . '_cache' . DIRECTORY_SEPARATOR;
+
+		if (DEBUG_MODE) {
+			$smarty->compile_check = true;
+			$smarty->debugging = true;
+		}
+		//$smarty->caching = 1;
+		//$smarty->cache_lifetime = 10;
+		//$smarty->clear_all_cache();
+		//$smarty->clear_cache('index.tpl');
+
+		$this->tpl_engine =& $smarty;
+	}
+	Function &NewSmartyEngine() {
+		$this_smarty =& new Smarty;
+		$this_smarty->template_dir = 'tpl';
+		$this_smarty->compile_dir = 'data'.DIRECTORY_SEPARATOR.'tpl'.DIRECTORY_SEPARATOR . '_compiled' . DIRECTORY_SEPARATOR;
+		$this_smarty->cache_dir = 'data'.DIRECTORY_SEPARATOR.'tpl'.DIRECTORY_SEPARATOR . '_cache' . DIRECTORY_SEPARATOR;
+
+		//	if (DEBUG_MODE) {
+		//		$this_smarty->compile_check = true;
+		//		$this_smarty->debugging = true;
+		//	}
+//		$this_smarty->assign ("SiteUserSigned", $SiteUserSigned);
+		if ($this->site->userSignedIn()) { 
+			$SiteUserSigned	= TRUE;
+			$SiteUser =& $this->site->user;
+			if ($SiteUser->activated()) {
+				$this_smarty->assign ("SiteUser", $SiteUser); 
+			} else {
+				$SiteUserSigned	= FALSE;
+				$this_smarty->assign ("SiteUserSigned", $SiteUserSigned);
+			}
+		} else {
+			$SiteUserSigned = FALSE;
+		}
+		if ($SiteUserSigned and $SiteUser->is_editor and isset($_GET['rebuild'])) {
+			$this_smarty->clear_all_cache ();
+		}
+		return $this_smarty;
+	}
+
+	Function prepare_data() {
+		$base_url = $this->site->base_url;
+
+		$param =& $this->param;
+		if ($this->site->userSignedIn()) { 
+			$SiteUserSigned	= TRUE;
+			$SiteUser =& $this->site->user;
+			if ($SiteUser->activated()) {
+				$param['SiteUserSigned'] = TRUE;
+				$param['SiteUser'] =& $SiteUser;
+				$param['SitePseudo'] =& $SiteUser->login;
+
+			} else {
+				$param['SiteUserSigned'] = FALSE;
+			}
+		} else {
+			$param['SiteUserSigned'] = FALSE;
+			$param['restricted_submenu'] = array (
+					"Espace r&eacute;serv&eacute; au membres" => $base_url."membres.php"
+				);
+		}
+			
+		$param['main_menu'] = array(
+//				"Test" => "test.php",
+				"Accueil" => $base_url."index.php",
+				"Description" => $base_url."apropos.php",
+				"Actualit&eacute;s" => $base_url."news.php",
+				"Rencontres" => $base_url."rencontres.php", 
+				"Membres" => $base_url."membres.php" , 
+		//		"Liens" => $base_url."liens.php" , 
+				"Contacts" => $base_url."contacts.php" 
+			);
+		$param['extra_menu'] = array(
+				"Wiki" => $base_url."wiki.php" ,
+				"Livre d'or" => $base_url."livre.php" ,
+			);
+		$param['submenu'] = array(
+						"Liens" => $base_url."liens.php",
+						"Faq" => $base_url."faq.php",
+						"Articles" => $base_url."articles.php",
+						"Docs" => $base_url."docs.php",
+						);
+						$param['SiteGfx'] = array (  
+							"orange_dot" => $base_url."img/icon/orange_dot.gif",
+							"flags" => array (
+								"fr" => $base_url."img/icon/flags/wfr.gif",
+								"en" => $base_url."img/icon/flags/wgb.gif"
+								)
+							);
+
+		$param['javascripts'][] = $this->site->base_url.'libs/overlib.js';
+//		$param['cssimports'][] = $this->site->base_url.'styles/gb.css';
+	}
+	Function prepare_display() {
+		$param =& $this->param;
+		$smarty =& $this->tpl_engine;
+		if (isset ($smarty)) {
+			$smarty->assign("SitePageID", $this->name);
+			if ($param['SiteUserSigned']) {
+				$smarty->assign("SiteUserSigned", TRUE);
+				$smarty->assign("SiteUser", &$param['SiteUser']);
+				$smarty->assign("SitePseudo", $param['SiteUser']->login);
+			} else {
+				$smarty->assign("SiteUserSigned", FALSE);
+				$param['submenu'] = array_merge ($param['submenu'] , &$param['restricted_submenu']);
+			}
+			$smarty->assign("submenu", &$param['submenu']);
+			$smarty->assign("SiteName", $this->site->name);
+			$smarty->assign("SiteTitle", $this->site->title);
+			$smarty->assign("SiteRealUrl", $this->site->configValue('site.realurl'));
+			$smarty->assign("SiteUrl", $this->site->configValue('site.url'));
+			$smarty->assign("SiteGfx", &$param['SiteGfx']);
+			$smarty->assign("menu", &$param['main_menu']);
+			$smarty->assign("extra_menu", &$param['extra_menu']);
+
+			$smarty->assign ('PageContentSrc', $this->name . '/' . $this->name . '.tpl');
+			$smarty->assign ('SiteBaseUrl', $this->site->base_url);
+			$smarty->assign ('SiteStyleUrl', $this->site->base_url.'styles/');
+
+			@$smarty->assign ('SiteJavaScripts', $this->param['javascripts']);
+			@$smarty->assign ('SiteStylesImport', $this->param['cssimports']);
+		}
+	}
+
+	Function display_html() {
+		if (
+				isset($this->tpl_engine)
+			) 
+		{
+			$this->tpl_engine->display('index.tpl');
+		} else {
+			$this->execute();
+		}
+	}
+	Function execute() {
+		$this->display_header();
+		$this->display_content();
+		$this->display_footer();
+	}
+	Function display_header() {
+		echo "<div style=\"background-color: #009; color: #fff;\">".$this->name."</div>";
+		echo "<div style=\"border: solid 1px blue; padding: 10px;\">\n";
+	}
+	Function display_content() {
+		echo "Home [<a href=\"index.php\">index</a>] <br/>";
+		if (isset ($this->username)) {
+			echo $this->username;
+			echo " <a href='index.php?app=sign_out&from=".$this->name."'>sign out</a>";
+		} else {
+			echo " <a href='index.php?app=sign_in&from=".$this->name."'>sign in</a>";
+		}
+		echo "<br/>\n";
+		echo "Application=" . $this->name ."<br/>----<br/>";
+	}
+	Function display_footer() {
+		echo "</div>\n";
+		echo "<hr/>Built by Jocelyn Fiat (c)<br/>";
+	}
+}
+
+?>

@@ -1,0 +1,64 @@
+[global]
+SCMlogs_appdir = /path-to/SCMlogs/
+SCMlogs_datadir = /path-to/SCMlogs/data/
+SCMlogs_appurl = "http://url-to/SCMlogs/"
+SCMlogs_passwd = "path-to-passwd";
+
+SCM_repositories= testsvn,repo_cvs
+SCM_default_repository= testsvn
+
+;svn_bin_path=
+; if svn is not in the path, precise the full path to the bin dir
+
+python_exec_path=python
+; if python is not in the path, precise the full path
+; if 'python_exec_path' is empty, the python script has to be executable directly
+
+[users]
+cfg_extension= .cfg
+pref_extension= .pref
+
+
+;You can specify to use the 3 following web application
+; to browse your repositories
+; webscmlogs will redirect the query
+;	to the web application set at the SCMlogs level
+; don't change this
+;browsing= webscmlogs
+;browsing= viewcvs
+;browsing= websvn
+
+;[repo:name-of-your-repository]
+; mode can be 'svn' or 'cvs'
+;mode=svn
+; Warning: the name should be the same for websvn or viewcvs ...
+;repository_name= testsvn
+;repository_path= /home/jfiat/testsvn/
+;logs_dir= /home/jfiat/svndir/LOGS
+
+[repo:testsvn]
+mode=svn
+repository_path= /home/jfiat/testsvn/
+repository_name= testsvn
+logs_dir= /home/jfiat/svndir/LOGS
+
+[repo:repo_cvs]
+mode=cvs
+repository_path= /home/cvs/
+repository_name= cvs
+logs_dir= /home/cvs/LOGS
+
+[webscmlogs]
+webapp_url= "http://url-to-scmlogs/SCMlogs/scmweblogs.php"
+[websvn]
+webapp_url= "http://url-to_websvn/websvn/"
+[viewcvs]
+webapp_url= "http://url-to-viewcvs/viewcvs.cgi/"
+
+[email]
+smtp_server=  smtp.domain.com
+at_domain_name= @domain.com
+superuser_name= SCMLogs
+superuser_email= SCMLogs@domain.com
+organization_name= SCMlogs users
+

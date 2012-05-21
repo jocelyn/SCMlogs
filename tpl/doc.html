@@ -1,0 +1,92 @@
+<div align='left'>
+<pre>
+	Overview
+	Feature
+   		Get your profile account
+   		Build your profile
+   		Change you preferences
+	How to
+	Need help ?
+</pre>
+
+<hr>
+<h2>Overview</h2>
+<ul>
+The main goal of the SCMLogs application is to provide the developper,<br/>
+a better way to be notified about CVS commits.<br/>
+<br/>
+The way it is done is simple:
+<ul>
+<li>Each time a commit is done, CVS will add the related cvs information in a log file (<em>/export/cvs/logs/commits.txt</em>).</li>
+<li>Every half day, a script is launched via the cron manager. This script process the commits.txt file, and send it to each developer.</li>
+</ul>
+<br/>
+But the SCMLogs application provide a better way to inform the developer. <br/>
+Indeed each developer can register himself to receive <strong>only commits information about the modules they want</strong>.<br/>
+Basically, each developer can set his profile to fit his needs. This can be done via the web interface of SCMLogs.<br/>
+<br/>
+Then the developer will receive half daily email with the cvs Logs. The form used is HTML, and the mail contains the U.R.L pointing to more advanced information, like full history, diff, and so on.<br/>
+</ul>
+
+
+<hr>
+<h2>Features</h2>
+<ul>
+	<li>receive email containing the last group of CVS commits.</li>
+	<li>filter on the logs, to get only those which fit your needs</li>
+	<li>more to come ...</li>
+</ul>
+
+
+<hr>
+<h2>How To ...</h2>
+<ul>
+<h3>Get your profile account</h3>
+	<ul>
+	Go to the authentification web page.<br/>
+	Enter your login<br/>
+	- if your account already exists, your will get your account web page.<br/>
+	- if not, you will be asked if you want to create it or not.<br/>
+	Be carefull, your login must be your email address (at login@eiffel.com).<br/>
+	Otherwise you won't receive the emails.
+	
+	</ul>
+<h3>Build your profile</h3>
+	<ul>
+	Once you are logged in.<br/>
+	Go to the "Edit" section.<br/>
+	You will get the modules tree.<br>
+	And also the text form representing your choice.<br>
+	<br>
+	Let's assume we have :
+<pre>
+ [X] a
+     [ ] b
+         [ ] b1
+         [ ] b2
+     [ ] c
+
+</pre>
+	Basically, if you have "a", you will receive all the information concerning the "a" module, and all its submodules (a,b,b1,b2). The equivalent would be "rainbow.*".<br>
+	If you want to receive only "a/b/b1" and "a/c", you will need to set your tree profile as following:
+<pre>
+ [ ] a
+     [ ] b
+         [X] b1
+         [ ] b2
+     [X] c
+</pre>
+if you checked the "b" checkbox, for instance, you will receive "a/b" and all the submodules, that means "a/b", "a/b/b1", and "a/b/b2"<br>
+	
+	</ul>
+<h3>Change your preferences</h3>
+	<ul> Not yet ready ... </ul>
+</ul>
+<hr>
+<h2>Need help ?</h2>
+	<ul>
+		This web application is built by Jocelyn Fiat, and can be distributed freely. At first it was a quick php script for trusted intranet (at my work), and then it got improved thanks to user's feedbacks and requests. It is still not yet perfect, but it can be used. I know it can be improved in many ways so feel free to contribute. You will find the source code at Berlios.de (http://developer.berlios.de/projects/djocewebtools/).<br/>
+		If you have any question: <a href="mailto:distrib@djoce.net?subject=[SCMLogs] HowTo ?">email me</a> (in French or english).<br>
+	</ul>
+<br><br>
+</div>

@@ -1,0 +1,89 @@
+<script type="text/javascript" language="JavaScript">
+  <!-- 
+function setFilterMode(mn)
+	{
+		if (mn == 'none') {
+			setblocking('profilfilterbox',false);
+			setblocking('filterbox',false); 
+		} else if (mn == 'text') {
+			setblocking('profilfilterbox',false);
+			setblocking('filterbox',true); 
+		} else { // profil
+			setblocking('filterbox',false); 
+			setblocking('profilfilterbox',true);
+		}
+		return false;
+	}
+ //-->
+</script>
+<div class="dlgbox" width="100%">
+	<div class=title>Global parameter</div>
+	<strong>Filter to use:</strong>
+				<SELECT NAME="filter"
+					onchange="setFilterMode(this.options[this.selectedIndex].value);"
+				>
+				<OPTION VALUE="profil" CHECKED >Profil</OPTION>
+				<OPTION VALUE="text" >Text</OPTION>
+				<OPTION VALUE="none" >None</OPTION>
+				</SELECT>
+	<strong>Format:</strong>
+				<SELECT NAME=format>
+				<OPTION VALUE='html' CHECKED>Html</OPTION>
+				<OPTION VALUE='text' >Text</OPTION>
+				</SELECT>
+	<strong>Type:</strong>
+				<SELECT NAME=type>
+				<OPTION VALUE='filtered' CHECKED>Filtered logs</OPTION>
+				<OPTION VALUE='raw' >Raw logs</OPTION>
+				</SELECT>
+	<div class="comment" >(if filter is Profil, it will use the one from profil [{VAR_USER}]<br/>
+		if it is Text, you can specific your own filter down the page.<br/>
+		if type is Raw, the filter option will be ignored.
+		)
+	</div>
+	<br/>
+	<div class=title>According to the profil ({VAR_USER} or None)</div>
+	<table border=0 cellpadding="6pt" cellspacing="4pt" width="100%">
+		<tr>
+			<td class=field> RAW logs file </td>
+			<td class=text>
+				<input TYPE=submit NAME=show VALUE='ShowRawLogs'><BR>
+			</td>
+		</tr>
+		<tr>
+			<td class=field> All logs </td>
+			<td class=text>
+				<input TYPE=submit NAME=show VALUE='ShowLogs'>
+::
+				<input TYPE=submit NAME=show VALUE='EmailLogs'>
+			</td>
+		</tr>
+		<tr>
+			<td class=field> Only {VAR_USER}'s commits logs </td>
+			<td class=text>
+				<input TYPE=submit NAME=show VALUE='ShowMyLogs'>
+::
+				<input TYPE=submit NAME=show VALUE='EmailMyLogs'>
+			</td>
+		</tr>
+		<tr>
+			<td class=field> Only commits from <br/>author and/or for tag </td>
+			<td class=text>
+				<input TYPE=text NAME=only_user VALUE="{VAR_ONLY_USER}" SIZE="8"> : Author <br/>
+				<input TYPE=text NAME=only_tag VALUE="{VAR_ONLY_TAG}" SIZE="8"> : Tag (only for CVS)
+				<hr/>
+				<input TYPE=submit NAME=show VALUE='ShowOnlyLogsFor'><br/>
+				<input TYPE=submit NAME=show VALUE='EmailOnlyLogsFor'>
+			</td>
+		</tr>
+	</table>
+
+	<div class="dlgbox"  id="profilfilterbox">
+		<div class=title>Filters : profil [{VAR_USER}]</div>
+		<textarea cols=40 rows=6 readonly >{VAR_USER_FILTER}</textarea>
+	</div>
+	<div class="dlgbox" id="filterbox" style="display:none;">
+		<div class=title>Filters : enter your own filter</div>
+		<textarea name="textfilters" cols=40 rows=6>{VAR_USER_FILTER}</textarea>
+	</div>
+</div>

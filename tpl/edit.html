@@ -1,0 +1,24 @@
+<div class=info>{VAR_PAGE_EDIT_MESSAGE}</DIV>
+
+<table width="100%" border="0" cellpadding="3px">
+	<tr>
+		<td width="50%" style="border: solid 1px #000;">
+<div class="tree" >
+{VAR_PAGE_EDIT_TREE}
+</div>
+</form>
+</div>
+		</td>
+		<td width="50%" style="border: solid 1px #000;">
+<form action='edit.php' name='SELECTIONTEXTFORM' method='post' >
+<div >
+<input type='hidden' name='op' value='edit' >
+<input type='submit' name='optext' value='SaveText' >
+<input type='reset' name='optext' value='Reset' >
+<input type='hidden' name='user' value='{VAR_USER}' >
+</div>
+{VAR_PAGE_EDIT_MODULES}
+</form>
+		</td>
+	</tr>
+</table>

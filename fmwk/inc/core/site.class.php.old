@@ -1,0 +1,108 @@
+<?php
+
+class SiteWeb {
+	var $config;
+	var $name;
+	var $title;
+	var $lang;
+	var $user;
+	var $member;
+	var $username;
+	var $application;
+	var $application_args=array();
+	var $base_url="";
+
+	Function SiteWeb($cfg) {
+		$this->load_configuration (&$cfg);
+	}
+
+	Function Start($app) {
+		$real_app = $app;
+
+		if (isset($GLOBALS['fromapplication'])) {
+			$fromapplication = $GLOBALS['fromapplication'];
+		} else {
+			$fromapplication = value_from_POST_GET ('fromapp', NULL);
+		}
+		$this->loadApplication ($real_app);
+		$this->lang = "en";
+	}
+
+	Function load_configuration (&$cfg) {
+		$this->config =& $cfg;
+		$this->base_url = $this->ConfigValue('site.base_url','');
+		$this->name = $this->ConfigValue('site.name', 'Name');
+		$this->title = $this->ConfigValue('site.title','Title');
+	}
+
+	Function &ConfigValue($n, $dft=NULL) {
+		if (isset ($this->config[$n])) {
+			return $this->config [$n];
+		} else {
+			return $dft;
+		}
+	}
+
+	Function applicationUrl($app=NULL) {
+		$root = $_SERVER['PHP_SELF'];
+		$p = strrpos ($root, "/");
+		if ($p === FALSE) {
+			$root_url = '/';
+		} else {
+			$root_url = substr($root, 0, $p + 1);
+		}
+		$root_url = "http://".$_SERVER['HTTP_HOST'].$root_url;
+		if (isset($app)) {
+			return $root_url."index.php?app=$app";
+		} else {
+			return $root_url;
+		}
+	}
+	Function userSignedIn() {
+		return isset($this->user);
+	}
+	Function getMember() {
+		require_once APPS_DIR.'members'.DIRECTORY_SEPARATOR.'members.inc.php';
+		if (!isset($this->member)) {
+			$this->member =& firstMemberByLogin ($this->username);
+		}
+	}
+
+	Function loadApplication ($app) {
+		$real_app = $app;
+		$classname = "CurrentSiteApp_" . $real_app;
+		if (file_exists("inc/apps/app.".$real_app.".php")) {
+			include "inc/apps/app.".$real_app.".php";
+			$this->application =& new $classname($real_app, $this);
+			if ($this->application->user_must_be_signed) {
+				if (!($this->userSignedIn())) {
+					$real_app = "access_denied";
+					include "inc/apps/app.".$real_app.".php";
+					$classname = "CurrentSiteApp_".$real_app;
+					$this->application =& new $classname($real_app, $this);
+					$this->application->set_asked_application ($app);
+				}
+			}
+		} else {
+			$real_app = "error";
+			$classname = "CurrentSiteApp_" . $real_app;
+			include "inc/apps/app.".$real_app.".php";
+			$this->application =& new $classname($real_app, $this);
+			$this->application->set_asked_application ($app);
+		}
+	}
+
+	Function prepare_data() {
+		$this->application->prepare_data();
+	}
+
+	Function prepare_display() {
+		$this->application->prepare_display();
+	}
+
+	Function display_html() {
+		$this->application->display_html();
+	}
+}
+
+?>

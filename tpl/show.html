@@ -1,0 +1,42 @@
+<TABLE border=0 cellpadding=2 cellspacing=2>
+<TR>
+	<TD class=field>Operation</TD>
+	<TD class=value>{VAR_PAGE_SHOW_MESSAGE}</TD>
+</TR>
+<TR>
+	<TD class=field>Parameters<BR>
+		<FORM ACTION="query.php" METHOD=POST>
+		<INPUT TYPE=submit VALUE="Edit Query">
+		<INPUT TYPE=hidden NAME="format" VALUE="{VAR_FORMAT}">
+		<INPUT TYPE=hidden NAME="type" VALUE="{VAR_TYPE}">
+		<INPUT TYPE=hidden NAME="only_user" VALUE="{VAR_ONLY_USER}">
+		<INPUT TYPE=hidden NAME="only_tag" VALUE="{VAR_ONLY_TAG}">
+		<INPUT TYPE=hidden NAME="selected_years" VALUE="{VAR_SELECTED_YEARS_GET}">
+		<INPUT TYPE=hidden NAME="user" VALUE="{VAR_USER}">
+		<!-- BEGIN HiddenCommitFilesBlock -->
+		<INPUT TYPE=hidden NAME="commitsfiles[]" VALUE="{VAR_ITEM_FILE_KEY}">
+		<!-- END HiddenCommitFilesBlock -->
+		</FORM>
+	</TD>
+	<TD class=value>{VAR_PAGE_SHOW_PARAM}</TD>
+</TR>
+<TR>
+	<TD class=field>Using data</TD>
+	<TD class=value>{VAR_PAGE_SHOW_DATA}</TD>
+</TR>
+<TR>
+	<TD class=field>Command</TD>
+	<TD class=value>{VAR_PAGE_SHOW_COMMAND}</TD>
+</TR>
+</TABLE><BR>
+<CENTER>
+
+
+<BR>
+..:: <STRONG>Result</STRONG> ::..
+<TABLE width=98% cellpadding=2 cellspacing=0 border=0 ><TR><TD class=border>
+<TABLE width=100% cellpadding=5 cellspacing=0 border=0 ><TR><TD class=result>
+{VAR_PAGE_SHOW_RESULT}
+</TD></TR></TABLE>
+</TD></TR></TABLE>
+</CENTER>

@@ -1,0 +1,203 @@
+<script type="text/javascript" language="JavaScript">
+  <!-- 
+function SetAllYearCheckBoxes(FormName, FieldName, CheckValue)
+{
+	for (m=1;m<=12;m=m+1) 
+	{
+		s = "" + m;
+		if (s.length == 1) { s = "0" + s; }
+		SetAllCheckBoxes(FormName, FieldName + "[" + s + "][]", CheckValue);
+	}
+}
+function SetAllYearCheckBoxesByCb(elt, FormName, FieldName, AllName)
+{
+	SetAllYearCheckBoxes(FormName, FieldName, elt.checked);
+	for (m=1;m<=12;m=m+1) 
+	{
+		SetAllCheckBoxes(FormName, AllName + "[" + m + "]",elt.checked);
+	}
+}
+function SetAllCheckBoxesByCb(elt, FormName, FieldName, AllName)
+{
+	SetAllCheckBoxes(FormName, FieldName, elt.checked);
+	SetAllCheckBoxes(FormName, AllName,false);
+}
+function SetAllCheckBoxes(FormName, FieldName, CheckValue)
+{
+	if(!document.forms[FormName])
+		return;
+	var objCheckBoxes = document.forms[FormName].elements[FieldName];
+	if(!objCheckBoxes)
+		//alert(FieldName + " : no checkbox");
+		return;
+	var countCheckBoxes = objCheckBoxes.length;
+	if(!countCheckBoxes)
+		objCheckBoxes.checked = CheckValue;
+	else
+		// set the check value for all check boxes
+		for(var i = 0; i < countCheckBoxes; i++)
+			objCheckBoxes[i].checked = CheckValue;
+}
+
+function setblocking(nr, b)
+{
+	if (document.layers)
+	{
+		current = b ? 'block' : 'none';
+		document.layers[nr].display = current;
+	}
+	else if (document.all)
+	{
+		current = b ? 'block' : 'none';
+		document.all[nr].style.display = current;
+	}
+	else if (document.getElementById)
+	{
+		vista = b ? 'block' : 'none';
+		document.getElementById(nr).style.display = vista;
+	}
+}
+function blocking(nr)
+{
+	if (document.layers)
+	{
+		current = (document.layers[nr].display == 'none') ? 'block' : 'none';
+		document.layers[nr].display = current;
+	}
+	else if (document.all)
+	{
+		current = (document.all[nr].style.display == 'none') ? 'block' : 'none';
+		document.all[nr].style.display = current;
+	}
+	else if (document.getElementById)
+	{
+		vista = (document.getElementById(nr).style.display == 'none') ? 'block' : 'none';
+		document.getElementById(nr).style.display = vista;
+	}
+}
+
+function StartYearFilesBlockControl(year,id,expanded)
+{
+	var t_open = year;
+	var t_close = year;
+	var bl_id= BC_BlockId(id);
+	var fOpen = BC_BlockControlIsOpened(bl_id, expanded);
+	document.write('<h1>');
+
+	document.write('<span>');
+	document.write ('<input type="checkbox" name="All['+year+']" onClick="SetAllYearCheckBoxesByCb(this,\'QueryForm\',\'commitsmonthfiles['+year+']\',\'All['+year+']\');return true;" />');
+	document.write('</span>');
+	document.write(' <a href="#" onclick="BC_BlockToggle(\'' + bl_id + '\',this,\'' + t_open + '\',\''+ t_close + '\');return true;" class="_block_control" >');
+	document.write(fOpen ? t_close : t_open);
+	document.write('</a>');
+	document.write('</h1>');
+	document.write('<div id="' + bl_id + '" style="display: ' + (fOpen ? 'block' : 'none') + '">');
+	return true;
+}
+
+function StartYearMonthFilesBlockControl(year,month,id,expanded)
+{
+	var t_open = month;
+	var t_close = month;
+	var bl_id= BC_BlockId(id);
+	var fOpen = BC_BlockControlIsOpened(bl_id, expanded);
+	document.write('<h2>');
+	document.write('<span>');
+	document.write ('<input type="checkbox" name="All['+year+']['+month+']" onClick="SetAllCheckBoxesByCb(this,\'QueryForm\',\'commitsmonthfiles['+year+']['+month+'][]\', \'All['+year+']\' );return true;" />');
+	document.write('</span>');
+	document.write(' <a href="#" onclick="BC_BlockToggle(\'' + bl_id + '\',this,\'' + t_open + '\',\''+ t_close + '\');return true;" class="_block_control" >');
+	document.write(fOpen ? t_close : t_open);
+	document.write('</a>');
+	document.write('</h2>');
+	document.write('<div id="' + bl_id + '" style="display: ' + (fOpen ? 'block' : 'none') + '">');
+	return true;
+}
+function myGetEltById(id)
+{
+	if (document.layers)
+	{
+		return document.layers[id];
+	}
+	else if (document.all)
+	{
+		return document.all[id];
+	}
+	else if (document.getElementById)
+	{
+		return document.getElementById(id);
+	}
+}
+function isValidDate(s){
+	var dteDate;
+	var year = s.substring(0,4);
+	var month = s.substring(5,7) - 1;
+	var day = s.substring(8,10);
+	dteDate=new Date(year,month,day);
+	return ((day==dteDate.getDate()) && (month==dteDate.getMonth()) && (year==dteDate.getFullYear()));
+}
+
+function update_datasrcdatestext(start_elt,end_elt,out_div_id)
+{
+	var out_div = myGetEltById(out_div_id);
+	var ed,sd;
+	var txt = "";
+	sd = start_elt.value;
+	if (isValidDate(sd)) {
+		txt = txt + " {" + sd + "}";
+		ed = end_elt.value;
+		if (ed != "") {
+			if (isValidDate(ed)) {
+				txt = txt + ":{" + ed + "} ";
+			} else {
+				alert(ed + " is NOT VALID.");
+				txt = "error";
+			}
+		} else {
+			txt = txt + ":HEAD";
+		}
+	} else {
+		alert(sd + " is NOT VALID.");
+		txt = "error";
+	}
+
+	out_div.innerHTML = txt;
+}
+
+// -->
+</script>
+
+<center>
+<form action="show.php?user={VAR_USER}" name="QueryForm" method="POST">
+<table border=0 cellpadding=10 cellspacing=5 >
+<tr>
+<td id="datasrc">
+	<input type="radio" name="datasrc" value="files" CHECKED 
+		onclick="setblocking('datasrcdates',false);setblocking('datasrcfiles',true);"
+		>Files</input>
+	<input type="radio" name="datasrc" value="dates" 
+		onclick="setblocking('datasrcdates',true);setblocking('datasrcfiles',false);"
+		>Dates</input>
+<div id="datasrcdates" style="display: none;">
+	<em>Only for subversion</em><br/>
+	<strong>Start date</strong> <small>(YYYY/MM/DD)</small><br/>
+	<input type="text" name="startdate" value="" size="12" MAXLENGTH="10"
+		onchange="update_datasrcdatestext(this.form.startdate,this.form.enddate,'datasrcdatestext');"
+	/>
+	<br/>
+	<strong>End date</strong> <small>(YYYY/MM/DD)</small><br/>
+	<input type="text" name="enddate" value="" size="12" MAXLENGTH="10" 
+		onchange="update_datasrcdatestext(this.form.startdate,this.form.enddate,'datasrcdatestext');"
+	/>
+	<div id="datasrcdatestext"></div>
+</div>
+<div id="datasrcfiles">
+{VAR_PAGE_COMMITS_FILES}
+</div>
+</td>
+<td class=form>
+{VAR_PAGE_COMMANDS}
+</td>
+</tr>
+</table>
+</form>
+</center>

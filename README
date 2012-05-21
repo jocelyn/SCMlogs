@@ -1,0 +1,67 @@
+###########################################################################
+###
+### This is not a beta, not an alpha ... not even a release
+### This script had be done by Jocelyn Fiat (jfiat@djoce.net)
+### for personal or corporate use
+### Please do not distribute it, for now it is not finished yet 
+### but for those who'd like to use it ... feel free to use it.
+###
+### And of course, send me any feedback, or modification on the scripts
+### to make it better for everyone.
+###
+###########################################################################
+
+---[ SCMLogs : Overview      ]---
+
+	Quickly, each time a commit is done in the repository
+	log.py is called, and put a formated log into a file "commits.txt"
+	Then everyday for instance,  %SCMLogs%/bin/email_cvscommits.sh is launched.
+	It will :
+		- move the file to a better place under a directory year YYYY/ and the filename containing the date
+		- send by email the logs in a formatted way (HTML), sorted by modules and date, and filtred according each developper profile.
+
+---[ SCMLogs : Requires      ]---
+
+	Apache + PHP : For the web interface
+	Python : for the script
+	Crontab : for the schedjuled tasks
+
+	Nota: The web server should be able to view the logs directory of the CVS repository.
+
+
+---[ SCMLogs : Web Interface ]---
+	unzip the archive file into your selected web directory
+	for instance /usr/local/apache/htdocs/SCMLogs
+	let's alias it in this doc by %SCMLogsDir%
+
+	edit %SCMLogsDir%/config.inc to set the adapted values
+
+	edit the data/all.tpl to include the module you want developper to be able to receive the mcommit logs.
+
+---[ SCMLogs : Cvs log ]---
+
+	add to the CVSROOT/loginfo file, the line:
+	DEFAULT /export/cvs/bin/log.py -i %{sVv} -l /export/cvs/logs/commits.txt
+
+---[ SCMLogs : Cvs email sender ]---
+	put in a cron, for instance :
+		0 21 * * * /usr/local/bin/python /export/cvs/bin/process_cvscommits.py
+		0 9 * * * /usr/local/bin/python /export/cvs/bin/process_cvscommits.py
+
+	Before don't forget to edit email_cvscommits.sh and to set the value of the parameters according to your environment.
+
+
+---[ SCMLogs : Warning ]---
+
+	Quite often the web server and the cvs server are not the same,
+    the web application will have to look at the logs directory.
+	the logs.py is quite independant and can be use only with cvs.
+	the script to send email has to be able to read the logs directory, and akso the data: SCMLogs/data/* files.
+	Depending if apache run as user:group nobody:nobody, you will have to make the directory SCMLogs/data writable to nobody, then to everyone ...
+	logs/commits.txt should be writable too.
+	
+	This doc had been made quickly ... so ... if you have any difficulties ... jfiat@djoce.net ...
+
+
+--Jocelyn.
+

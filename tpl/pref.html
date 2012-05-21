@@ -1,0 +1,31 @@
+<table width="100%" cellpadding=10 cellspacing=20 border=0>
+	<tr><td width="50%" style="padding: 15px; border: dotted #ddd 1px; background-color: #ffe;">
+{VAR_PAGE_PREF}
+</td><td style="padding: 15px; font-size: 75%; border: dotted #ddd 1px; background-color: #eee;">
+<h3>Quick description</h3>
+<li><strong>Sending or not</strong></li>
+	<p style="padding-left: 20px;">
+	You decide if you want to receive or not the logs emails.<br/>
+	<ul>
+	- If you check "Email sending" then you will receive emails, otherwise you won't receive any email.<br/>
+	- If you check "Email empty logs" then if "Email sending" is selected, you will receive emails even if there is no commit.
+	</ul>
+	</p>
+<li><strong>Output message type</strong></li>
+	<p style="padding-left: 20px;">
+	There is 2 kinds of logs presentations
+	<ul>
+		- "Filtered logs" means the logs are filtered according to your profile and the logs are presented per directory.<br/>
+		- "Raw logs" means you get the svn or cvs 'log' output (or similar), there is no special processing on the output.
+	</ul>
+	</p>
+<li><strong>Commits log message format</strong></li>
+	<p style="padding-left: 20px;">
+	And you can have HTML email or only TEXT email.
+	<ul>
+		- If you choose the HTML, you will get a HTML version of the log, with clickable link to get the diff, annotate/blame, revision information and so on.<br/>
+		- Now if you choose the TEXT format, you will get either the Raw logs or a Text version of the Filtered logs presentation. There is no clickable link in the logs, but the email size will be much smaller (and newsgroups compliant).
+	</ul>
+	</p>
+</td></tr>
+</table>
